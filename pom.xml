@@ -5,12 +5,12 @@
         <artifactId>plugin</artifactId>
         <version>3.40</version>
     </parent>
-    <artifactId>permissive-script-security</artifactId>
+    <artifactId>really-permissive-script-security</artifactId>
     <version>0.6-SNAPSHOT</version>
     <packaging>hpi</packaging>
-    <name>Permissive Script Security Plugin</name>
-    <description>Do not install unless you know what you are doing. Turns on permissive mode of Script Security Plugin. Problematic signatures will be logged but access will not be rejected.</description>
-    <url>https://wiki.jenkins-ci.org/display/JENKINS/Permissive+Script+Security+Plugin</url>
+    <name>Really Permissive Script Security Plugin</name>
+    <description>Do not install unless you know what you are doing. Turns on really permissive mode of Script Security Plugin. </description>
+    <url>https://github.com/merc1031/really-permissive-script-security-plugin.git</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

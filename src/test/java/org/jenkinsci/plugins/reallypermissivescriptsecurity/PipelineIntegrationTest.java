@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.jenkinsci.plugins.permissivescriptsecurity;
+package org.jenkinsci.plugins.reallypermissivescriptsecurity;
 
 import hudson.model.Result;
 import org.jenkinsci.plugins.scriptsecurity.scripts.ScriptApproval;
@@ -58,12 +58,11 @@ public class PipelineIntegrationTest {
     @Before
     public void before() {
         l.capture(100);
-        l.record(PermissiveWhitelist.class, Level.INFO);
+        l.record(ReallyPermissiveWhitelist.class, Level.INFO);
     }
 
     @Test
-    public void dangerousSignaturesNotReportedWhenNoSecurity() throws Exception {
-        PermissiveWhitelist.MODE = PermissiveWhitelist.Mode.NO_SECURITY;
+    public void dangerousSignaturesNotStopped() throws Exception {
         WorkflowJob p = newJob("new File('/etc/shadow/')");
         j.buildAndAssertSuccess(p);
 
@@ -72,41 +71,7 @@ public class PipelineIntegrationTest {
     }
 
     @Test
-    public void dangerousSignaturesRejectedWhenDisabled() throws Exception {
-        PermissiveWhitelist.MODE = PermissiveWhitelist.Mode.DISABLED;
-        WorkflowJob p = newJob("new File('/etc/shadow/')");
-        WorkflowRun r = j.assertBuildStatus(Result.FAILURE, p.scheduleBuild2(0));
-        assertThat(r.getLog(), containsString("Scripts not permitted to use new java.io.File java.lang.String"));
-
-        assertPendingSignatures(Collections.singletonList("new java.io.File java.lang.String"));
-        assertThat(l.getMessages(), emptyIterable());
-    }
-
-    @Test
-    public void dangerousSignaturesReportedWhenEnabled() throws Exception {
-        PermissiveWhitelist.MODE = PermissiveWhitelist.Mode.ENABLED;
-        WorkflowJob p = newJob("new File('/etc/shadow/')");
-        WorkflowRun r = j.buildAndAssertSuccess(p);
-
-        assertPendingSignatures(Collections.singletonList("new java.io.File java.lang.String"));
-        assertThat(l.getMessages(), iterableWithSize(1));
-    }
-
-    @Test
-    public void noSignaturesWhenDisabled() throws Exception {
-        PermissiveWhitelist.MODE = PermissiveWhitelist.Mode.DISABLED;
-        _noSignaturesForSafeScript();
-    }
-
-    @Test
-    public void noSignaturesWhenEnabled() throws Exception {
-        PermissiveWhitelist.MODE = PermissiveWhitelist.Mode.ENABLED;
-        _noSignaturesForSafeScript();
-    }
-
-    @Test
-    public void noSignaturesWhenNoSecurity() throws Exception {
-        PermissiveWhitelist.MODE = PermissiveWhitelist.Mode.NO_SECURITY;
+    public void noSignaturesEver() throws Exception {
         _noSignaturesForSafeScript();
     }
 
